@@ -1,0 +1,22 @@
+{
+  "name": "eugene-petrov/range-manager",
+  "description": "Ranges numbers",
+  "keywords": [
+    "php",
+    "range",
+    "numbers"
+  ],
+  "license": "MIT",
+  "type": "library",
+  "require": {
+    "php": "^7|^8"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6|^7|^8|^9"
+  },
+  "autoload": {
+    "psr-4": {
+      "ReadyToGo\\Numbers\\": "src"
+    }
+  }
+}
