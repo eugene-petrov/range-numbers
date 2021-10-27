@@ -20,28 +20,25 @@ class RangeManager
     public function getRanges(array $numbers): array
     {
         $numbers = array_unique(array_filter($numbers));
+        sort($numbers);
         if ($this->isSequenceWithoutGaps($numbers)) {
-            return [min($numbers) . '-' . max($numbers)];
+            return [reset($numbers) . '-' . end($numbers)];
         }
 
-        sort($numbers);
-        $sequence = [];
-        $ranges = [];
-
+        $rangePool = [];
+        $firstInRange = false;
         foreach ($numbers as $key => $number) {
-            if ($this->canNumberBeAddedToTheSequence((int) $number, $sequence)) {
-                $sequence[] = $number;
-                unset($numbers[$key]);
-            } else {
-                $ranges = array_merge(
-                    [min($sequence) . '-' . max($sequence)],
-                    $this->getRanges($numbers)
-                );
-                break;
+            if (!$firstInRange) {
+                $firstInRange = $number;
+            }
+
+            if ($this->isItSequenceEnd((int) $number, (int) ($numbers[$key + 1] ?? 0))) {
+                $rangePool[] = $firstInRange . '-' . $number;
+                $firstInRange = false;
             }
         }
 
-        return $ranges;
+        return $rangePool;
     }
 
     /**
@@ -50,29 +47,18 @@ class RangeManager
      */
     private function isSequenceWithoutGaps(array $numbers): bool
     {
-        $max = (int) max($numbers);
-        $min = (int) min($numbers);
-
-        if ($max === $min) {
-            return true;
-        }
-
-        return ($max - $min + 1) === count($numbers);
+        $min = (int) reset($numbers);
+        $max = (int) end($numbers);
+        return ($max === $min) || (($max - $min) === 0);
     }
 
     /**
+     * @param int $currentNumber
      * @param int $nextNumber
-     * @param array $sequence
      * @return bool
      */
-    private function canNumberBeAddedToTheSequence(int $nextNumber, array $sequence): bool
+    private function isItSequenceEnd(int $currentNumber, int $nextNumber): bool
     {
-        $lastItemFromTheSequence = (int) end($sequence);
-
-        if (!$lastItemFromTheSequence) {
-            return true;
-        }
-
-        return ($lastItemFromTheSequence + 1) === $nextNumber;
+        return (!$nextNumber) || (($currentNumber + 1) !== $nextNumber);
     }
 }
