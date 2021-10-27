@@ -64,4 +64,20 @@ class RangeManagerTest extends TestCase
             $this->rangeManager->getRanges([1, 2, 3, 4, 5, 6, 7, null, 10, 11, 64, 23, 22])
         );
     }
+
+    public function testOneNumberCase()
+    {
+        $this->assertSame(
+            ['100-100'],
+            $this->rangeManager->getRanges([100])
+        );
+    }
+
+    public function testSequenceWithoutGapsCase()
+    {
+        $this->assertSame(
+            ['1-7'],
+            $this->rangeManager->getRanges([1, 2, 3, 4, 5, 6, 7])
+        );
+    }
 }
