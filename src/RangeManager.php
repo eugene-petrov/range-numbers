@@ -19,7 +19,6 @@ class RangeManager
      */
     public function getRanges(array $numbers): array
     {
-        $numbers = array_unique(array_filter($numbers));
         sort($numbers);
         if ($this->isSequenceWithoutGaps($numbers)) {
             return [reset($numbers) . '-' . end($numbers)];
@@ -49,7 +48,7 @@ class RangeManager
     {
         $min = (int) reset($numbers);
         $max = (int) end($numbers);
-        return ($max === $min) || (($max - $min) === 0);
+        return ($max === $min) || (($max - $min) === 1);
     }
 
     /**
